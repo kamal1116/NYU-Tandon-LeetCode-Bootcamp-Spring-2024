@@ -1,0 +1,28 @@
+from collections import Counter
+
+class Solution:
+    def originalDigits(self, s: str) -> str:
+        # Count the frequency of each character in the input string.
+        char_count = Counter(s)
+
+        # Define the unique characters that represent digits and their corresponding words.
+        digit_chars = "0123456789"
+        digit_words = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"]
+
+        # Initialize an array to store the count of each digit.
+        digit_count = [0] * 10
+
+        # Identify unique characters that uniquely represent each digit and update digit_count.
+        unique_chars = {'z': 0, 'w': 2, 'u': 4, 'x': 6, 'g': 8, 'o': 1, 't': 3, 'f': 5, 's': 7, 'i': 9}
+        for char, digit in unique_chars.items():
+            count = char_count[char]
+            digit_count[digit] += count
+            for c in digit_words[digit]:
+                char_count[c] -= count
+
+        # Convert digit_count to the final result string.
+        result = ""
+        for digit, count in enumerate(digit_count):
+            result += str(digit) * count
+
+        return result
