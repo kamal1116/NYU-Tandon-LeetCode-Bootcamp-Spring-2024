@@ -1,0 +1,26 @@
+class Solution:
+    def myAtoi(self, s: str) -> int:
+        # Step 1: Read in and ignore any leading whitespace.
+        i = 0
+        while i < len(s) and s[i] == ' ':
+            i += 1
+
+        # Step 2: Check for a sign character.
+        if i < len(s) and (s[i] == '+' or s[i] == '-'):
+            sign = -1 if s[i] == '-' else 1
+            i += 1
+        else:
+            sign = 1
+
+        # Step 3: Read in the characters until the next non-digit character or end of input.
+        num = 0
+        while i < len(s) and s[i].isdigit():
+            digit = int(s[i])
+            # Step 4: Convert digits into an integer.
+            num = num * 10 + digit
+            i += 1
+
+        # Step 5: Apply sign and clamp the result to the 32-bit signed integer range.
+        result = sign * num
+        int_min, int_max = -2**31, 2**31 - 1
+        return max(min(result, int_max), int_min)
