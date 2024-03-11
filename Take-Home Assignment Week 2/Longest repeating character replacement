@@ -1,0 +1,24 @@
+class Solution:
+    def characterReplacement(self, s: str, k: int) -> int:
+        # Initialize variables.
+        max_length = 0
+        max_count = 0
+        start = 0
+        char_count = [0] * 26  # Assuming only uppercase English letters
+
+        for end in range(len(s)):
+            # Update the count of the current character.
+            char_count[ord(s[end]) - ord('A')] += 1
+            # Update the maximum count of any character in the current window.
+            max_count = max(max_count, char_count[ord(s[end]) - ord('A')])
+
+            # Check if the current window size can be extended to get a longer substring.
+            # If not, move the window's starting point.
+            if end - start + 1 - max_count > k:
+                char_count[ord(s[start]) - ord('A')] -= 1
+                start += 1
+
+            # Update the maximum length of the substring.
+            max_length = max(max_length, end - start + 1)
+
+        return max_length
