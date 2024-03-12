@@ -1,0 +1,59 @@
+class Solution:
+    def palindromePairs(self, words):
+        # Function to check if a string is a palindrome
+        def is_palindrome(s):
+            # Check if the result is already calculated
+            if s in check:
+                return check[s]
+
+            # Base case: an empty string is a palindrome
+            if len(s) == 0:
+                check[s] = True
+                return True
+
+            # Check if the string is a palindrome
+            n = len(s)
+            for i in range(n // 2 + 1):
+                if s[i] != s[(n - i) - 1]:
+                    check[s] = False
+                    return False
+
+            check[s] = True
+            return True
+
+        check = {}  # Dictionary to store the results of palindrome checks
+        mp = {}     # Dictionary to store the reverse of each word along with its index
+
+        ans = []    # List to store the final answer
+
+        # Store the reverse of every string in the words list in the 'mp' dictionary
+        for i, word in enumerate(words):
+            rev_word = word[::-1]
+            mp[rev_word] = i
+
+        # If an empty string is present in the 'mp' dictionary, add palindrome pairs with it
+        if "" in mp:
+            for i, word in enumerate(words):
+                if i == mp[""]:
+                    continue
+                if is_palindrome(word):
+                    ans.append([i, mp[""]])
+
+        # Iterate through each word in the words list
+        for i, word in enumerate(words):
+            right = word
+            left = ""
+
+            # Iterate through each character in the current word
+            for j in range(len(word)):
+                left += word[j]
+                right = right[1:]
+
+                # Check if a palindrome pair is found with the current left and right substrings
+                if left in mp and is_palindrome(right) and mp[left] != i:
+                    ans.append([i, mp[left]])
+
+                if right in mp and is_palindrome(left) and mp[right] != i:
+                    ans.append([mp[right], i])
+
+        return ans
