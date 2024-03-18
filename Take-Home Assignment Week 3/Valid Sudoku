@@ -1,0 +1,28 @@
+import numpy as np
+
+class Solution:
+    def isValidSudoku(self, board: List[List[str]]) -> bool:
+        board_array = np.array(board)
+        
+        # Check rows and columns
+        if not all(self.is_valid_group(board_array[i, :]) for i in range(9)):
+            return False
+        if not all(self.is_valid_group(board_array[:, i]) for i in range(9)):
+            return False
+        
+        # Check 3x3 sub-boxes
+        for i in range(0, 9, 3):
+            for j in range(0, 9, 3):
+                if not self.is_valid_group(board_array[i:i+3, j:j+3].flatten()):
+                    return False
+        
+        return True
+    
+    def is_valid_group(self, group: np.ndarray) -> bool:
+        seen = set()
+        for digit in group:
+            if digit != '.':
+                if digit in seen:
+                    return False
+                seen.add(digit)
+        return True
