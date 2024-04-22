@@ -1,0 +1,23 @@
+class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+
+from typing import Optional
+
+class Solution:
+    def kthSmallest(self, root: Optional[TreeNode], k: int) -> int:
+        stack = []
+        while True:
+            # Reach the leftmost node of the current subtree
+            while root:
+                stack.append(root)
+                root = root.left
+            # Retrieve the next node to process
+            root = stack.pop()
+            k -= 1
+            if k == 0:
+                return root.val
+            # Move to the right subtree
+            root = root.right
